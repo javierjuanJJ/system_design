@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth1
+  labels:
+    app: auth1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: auth1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 3
+  template:
+    metadata:
+      labels:
+        app: auth1
+    spec:
+      containers:
+        - name: auth1
+          image: jjal20021998/auth1:latest
+          ports:
+            - containerPort: 5000
+          envFrom:
+            - configMapRef:
+                name: auth-configmap
+            - secretRef:
+                name: auth-secret
